@@ -1,0 +1,141 @@
+/*
+    Modified tutorial example
+    Date: 2013-12-03T00:49:30
+*/
+var WEBSERVER_PORT = 40005;
+
+var myname  = __filename;
+var myhome  = __dirname;
+
+var http    = require('http');
+var path    = require('path');
+var url     = require('url');
+
+var myServerJS    = myhome + '/server-js';
+var myHTML        = myhome + '/html';
+var myCSS         = myhome + '/css';
+var myJScript     = myhome + '/js';
+var myJScriptPost = myhome + '/js-post';
+
+//var opersys      = require(myServerJS + '/opersys');
+//var filesys      = require(myServerJS + '/filesys');
+var simpleString = require(myServerJS + '/simpleStringf');
+var loadfile     = require(myServerJS + '/loadfile');
+var rExt         = require(myServerJS + '/resolvext');
+
+// The two (2) paths are to show that file can load relative or absolute.
+var baseHTMLWrapper = myHTML + '/Wrapper.html';
+var baseHTMLMenu    = myHTML + '/mainmenu.html';
+var baseHTML404     = myHTML + '/404.html';
+
+// These are template files. They work with simpleStringf()
+var theHTMLWrapper = loadfile.asText(baseHTMLWrapper);
+var theHTMLMenu    = loadfile.asText(baseHTMLMenu);
+var theHTML404     = loadfile.asText(baseHTML404);
+var the404Error    = '404 - Not Found';
+
+var theRESTInterfaces = {'/monitor':true, '/navigate':true , '/system':true};
+var theHTMLFiles      = {'/':true, '/index.html':true};
+var theExtensions     = {'.js':true, '.css':true, '.html':true, '.ico':true, '.jpg':true, 'png':true};
+var theOkayDirs       = {'/':true, '/js':true, '/css':true, '/trial':true }
+
+/*
+*
+*	M	A	I	N
+*
+*/
+http.createServer(function (request, response) {
+    date = new Date();
+    theDateUTC  = date.toUTCString();
+    the404Error = '404 - Not Found';
+
+    theURL = url.parse(request.url); // auth, pathname, search, query, hash
+
+    //console.log("\"%s\" %s %s %s", theDateUTC,  request.method, request.url, request.httpVersion);
+
+    isREST = theRESTInterfaces[theURL.pathname];
+    isHTML = theHTMLFiles[theURL.pathname];
+    ifOkayDir = theOkayDirs[path.dirname(theURL.pathname)];
+    isAnExt   = theExtensions[path.extname(theURL.pathname)];
+    theExtIs  = (isAnExt) ? path.extname(theURL.pathname) : null;
+    /*
+    console.log("isREST:%s %s",  isREST, theURL.pathname);
+    console.log("isHTML:%s %s",  isHTML, theURL.pathname);
+    console.log("ifOkayDir:%s %s",  ifOkayDir, theURL.pathname);
+    console.log("isAnExt:%s %s", isAnExt, theURL.pathname);
+    console.log("theExtIs:%s %s", theExtIs, theURL.pathname);
+    */
+    theHTMLWrapper = loadfile.asText(baseHTMLWrapper);
+    theJScript     = loadfile.asText(myJScript + '/index.js');
+    theJScriptPost = loadfile.asText(myJScriptPost + '/index.js');
+
+    is404 = true;
+    isJSON = false; // look for an incoming JSON request (as a form, possibly)
+    theDocument = '';
+    if (isREST) {
+        theHTMLStub    = loadfile.asText(myHTML + '/REST.html');
+        theJScript     = ''; //loadfile.asText(myJScript + '/rest.js');
+        theJScriptPost = ''; //loadfile.asText(myJScriptPost + '/rest.js');
+
+        theHTMLBody = simpleString.b_sprintf(theHTMLStub, [ theURL.pathname ]);
+        theDocument = simpleString.b_sprintf(theHTMLWrapper, [ theJScript, theHTMLBody , theJScriptPost]);
+    } else if (isHTML) {
+        basename = path.basename(theURL.pathname, theExtIs);
+
+        theHTMLBody = loadfile.asText(myHTML + '/mainmenu.html');
+
+        theJScript     = ''; //loadfile.asText(myJScript + '/' + basename +'.js');
+        theJScriptPost = ''; //loadfile.asText(myJScriptPost + '/' + basename +'.js');
+
+        theDocument = simpleString.b_sprintf(theHTMLWrapper, [ theJScript, theHTMLBody , theJScriptPost]);
+    } else if (isAnExt) {
+        if (ifOkayDir) {
+            theDocument = loadfile.asText( myhome + theURL.pathname );
+        } else {
+            theDocument = '';
+        }
+    }
+
+    // (further down) response.write expects a 'String' or a 'Buffer'
+    // So resolve, if "null" or "undefined" is returned from a fileload because it (fileload) throws an error.
+    theDocument = (theDocument) ? theDocument : '';
+    is404       = (theDocument) ? false : true;
+
+    if (is404) {
+        theHTMLBody = simpleString.b_sprintf(theHTML404, [ the404Error ] );
+        theDocument = simpleString.b_sprintf(theHTMLWrapper, [ theJScript, theHTMLBody , theJScriptPost]);
+
+        response.writeHead(404, {'Content-Type': 'text/html'});
+        response.write('<!DOCTYPE HTML>\n');
+    } else if (isJSON) {
+        response.writeHead(200, {'Content-Type': 'text/json'});  // 'application/json'
+    } else {
+        switch (theExtIs) { 
+        case '.css':
+            response.writeHead(200, {'Content-Type': 'text/css'});
+        break;
+        case '.js':
+            response.writeHead(200, {'Content-Type': 'application/javascript'});
+        break;
+        case '.html':
+        default:
+            response.writeHead(200, {'Content-Type': 'text/html'});
+            response.write('<!DOCTYPE HTML>\n');
+            //response.writeHead(200, {'Content-Type': 'text/plain'});
+        break;
+        }
+    }
+
+    response.write(theDocument);
+    response.end('');
+
+    // The documentation says:
+    // """After response header was sent to the client,"""
+    // """this property indicates the status code which was sent out."""
+    console.log("\"%s\" %s %s %s", theDateUTC,  request.method, request.url, response.statusCode);
+
+}).listen(WEBSERVER_PORT);
+
+
+console.log('Server running at http://127.0.0.1:'+ WEBSERVER_PORT + '/');
+

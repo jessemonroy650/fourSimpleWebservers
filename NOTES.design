@@ -1,0 +1,58 @@
+= NOTES =
+Date: 2014-04-27
+
+<pre>
+
+* webserver_fin/httpd.njs - webserver & REST w/simpleStringf
+    # date
+    # parse request
+    # setup logic states
+    # ----
+    # load html, binary, or text
+    # resolve 404 state
+    # output header 404 or other (pre-hash)
+    # ----
+    # output data
+    # log response
+
+* webserver_min/minweb.njs - minimual webserver
+    # date
+    # parse request
+    # setup logic states
+    # ----
+    # load html, binary, or text
+    # resolve 404 state
+    # output header 404 or other (pre-hash)
+    # ----
+    # output data
+    # log response
+
+* webserver_pre/premain.njs - hard pages & REST w/simpleStringf
+    # date
+    # parse request
+    # setup logic states
+    # ----
+    # REST, HTML, or other
+======> # load html templates
+        # assemble data for the document or REST interface, enumerate response (output) type
+    # resolve 404 state
+    # output header 404 or other (pre-hash)
+    # ----
+    # output data
+    # log response
+    
+
+* webserver_main/main.njs - hard pages & REST w/simpleStringf
+    # date
+    # load html templates
+    # parse request
+    # setup logic states
+    # ----
+    # assemble data for the document or REST interface, enumerate response (output) type
+==> * Short-circuit an empty buffer to 404 error
+    # output header (branch as index)
+    # ----
+    # output data
+    # log response
+
+</pre>

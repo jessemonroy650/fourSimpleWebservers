@@ -1,0 +1,26 @@
+ <head> Webcam - Pan and Tilt </head>
+ <body text="#000000" bgcolor="#EEF0E0" link="#0000EE" vlink="#551A8B" alink="#FF0000">
+---++ Web Camera - Logitech Sphere - Pan and Tilt
+<applet code=com.charliemouse.cambozola.Viewer
+ archive=cambozola.jar width=320 height=240> 
+<param name=url value=http://www.yourdomaine.com:8081> </applet> 
+<form name="pantilt" action="control204pt.php" method="post"> Click buttons below to rotate and tilt camera.
+ <INPUT TYPE=SUBMIT NAME="command" VALUE="Pan Left "> 
+ <INPUT TYPE=SUBMIT NAME="command" VALUE=" L5 ">
+ <INPUT TYPE=SUBMIT NAME="command" VALUE=" L4 ">
+ <INPUT TYPE=SUBMIT NAME="command" VALUE=" L3 "> 
+ <INPUT TYPE=SUBMIT NAME="command" VALUE=" L2 "> 
+ <INPUT TYPE=SUBMIT NAME="command" VALUE=" L1 "> <INPUT TYPE=SUBMIT NAME="command" VALUE="Center Pan">
+ <INPUT TYPE=SUBMIT NAME="command" VALUE=" R1 "> <INPUT TYPE=SUBMIT NAME="command" VALUE=" R2 "> 
+ <INPUT TYPE=SUBMIT NAME="command" VALUE=" R3 "> <INPUT TYPE=SUBMIT NAME="command" VALUE=" R4 "> 
+ <INPUT TYPE=SUBMIT NAME="command" VALUE=" R5 "> <INPUT TYPE=SUBMIT NAME="command" VALUE="Pan Right">
+ <INPUT TYPE=SUBMIT NAME="command" VALUE="Tilt Down"> <INPUT TYPE=SUBMIT NAME="command" VALUE=" D5 "> 
+ <INPUT TYPE=SUBMIT NAME="command" VALUE=" D4 "> <INPUT TYPE=SUBMIT NAME="command" VALUE=" D3 "> 
+ <INPUT TYPE=SUBMIT NAME="command" VALUE=" D2 "> <INPUT TYPE=SUBMIT NAME="command" VALUE=" D1 ">
+ <INPUT TYPE=SUBMIT NAME="command" VALUE="Center Tilt"> <INPUT TYPE=SUBMIT NAME="command" VALUE=" U1 ">
+ <INPUT TYPE=SUBMIT NAME="command" VALUE=" U2 "> <INPUT TYPE=SUBMIT NAME="command" VALUE=" U3 ">
+ <INPUT TYPE=SUBMIT NAME="command" VALUE=" U4 "> <INPUT TYPE=SUBMIT NAME="command" VALUE=" U5 "> 
+ <INPUT TYPE=SUBMIT NAME="command" VALUE=" Tilt Up ">
+ <br /> <INPUT TYPE=SUBMIT NAME="command" VALUE="Calibrate"> 
+</form> 
+</body> 
