@@ -14,13 +14,13 @@ In learning Javascript and node.js, I applied what I know about application deve
 
 First some basics on the features. All the system-oriented features are broken into modules, like (opersys: operation system, filesys: file system, resolvext: resolve external files type - like jpg, js, html). Next, three (3) of the four(4) version can server dynamic webpages, via templages. All the servers follow a basic pattern:
 
-# accept socket connect
-# load static components, including templates, date and time, and other *state trees*
-# resolve internal state logic and assign the states to booleans
-# load dynamic components, including webpages or binary blobs
-# resolve component state (http 200, 404, or other)
-# output the component
-# finally log output
+1. accept socket connect
+2. load static components, including templates, date and time, and other *state trees*
+3. resolve internal state logic and assign the states to booleans
+4. load dynamic components, including webpages or binary blobs
+5. resolve component state (http 200, 404, or other)
+6. output the component
+7. finally log output
 
 ## main.js ##
 
